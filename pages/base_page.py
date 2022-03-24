@@ -1,4 +1,4 @@
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 
 class BasePage():
@@ -13,6 +13,6 @@ class BasePage():
     def is_element_present(self, how, what):
         try:
             self.browser.find_element(how, what)
-        except TimeoutException:
+        except (TimeoutException, NoSuchElementException):
             return False
         return True
