@@ -1,5 +1,6 @@
 from selenium.common.exceptions import TimeoutException
 
+
 class BasePage():
     def __init__(self, browser, url, timeout=10):
         self.browser = browser
