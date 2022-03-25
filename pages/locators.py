@@ -8,3 +8,12 @@ class LoginPageLocators():
     LOGIN_URL = "login"
     LOGIN_FORM = (By.CSS_SELECTOR, "#login_form")
     REGISTER_FORM = (By.CSS_SELECTOR, "#register_form")
+
+class ProductPageLocators():
+    ADD_TO_BUSKET_BUTTON = (By.CSS_SELECTOR, "button.btn-add-to-basket")
+    PRODUCT_NAME = (By.CSS_SELECTOR, ".product_main h1")
+    PRODUCT_PRICE = (By.CSS_SELECTOR, "p.price_color")
+    MSG_PRODUCT_ADDED_TO_BASKET = (By.CSS_SELECTOR, "#messages > :nth-child(1)")
+    MSG_BASKET_WITH_COST = (By.CSS_SELECTOR, "#messages > .alert-info")
+    MSG_PRODUCT_NAME = (By.CSS_SELECTOR, "#messages > :nth-child(1) strong")
+    MSG_PRODUCT_PRICE = (By.CSS_SELECTOR, "#messages > .alert-info strong")
