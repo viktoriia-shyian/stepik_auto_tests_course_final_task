@@ -8,8 +8,14 @@ class ProductPage(BasePage):
         self.press_the_button(*ProductPageLocators.ADD_TO_BUSKET_BUTTON)
         self.solve_quiz_and_get_code()
 
-    def should_be_message_product_added_to_basket(self):
-        assert self.is_element_present(*ProductPageLocators.MSG_PRODUCT_ADDED_TO_BASKET), "Message that product was added to basket is not presented"
+    def should_be_success_message(self):
+        assert self.is_element_present(*ProductPageLocators.SUCCESS_MESSAGE), "Message that product was added to basket is not presented"
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), "Success message is presented, but should not be"
+
+    def should_disappear_success_message(self):
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), "Success message didn't disappear"
 
     def should_be_message_basket_with_cost(self):
         assert self.is_element_present(*ProductPageLocators.MSG_BASKET_WITH_COST), "Message with basket cost is not presented"
