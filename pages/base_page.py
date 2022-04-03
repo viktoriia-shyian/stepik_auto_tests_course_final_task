@@ -69,16 +69,12 @@ class BasePage:
         actions.click(button).perform()
 
     def get_element_value(self, how, what, timeout=10, attribute='text'):
-        try:
-            element = WebDriverWait(self.browser, timeout=timeout).until(EC.presence_of_element_located((how, what)))
+        element = WebDriverWait(self.browser, timeout=timeout).until(EC.presence_of_element_located((how, what)))
 
-            if attribute == 'text':
-                return element.text
-            else:
-                return element.get_attribute(attribute)
-
-        except (TimeoutException, NoSuchElementException):
-            return float("NaN")
+        if attribute == 'text':
+            return element.text
+        else:
+            return element.get_attribute(attribute)
 
     def go_to_login_page(self):
         link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
@@ -90,3 +86,12 @@ class BasePage:
     def go_to_basket_page(self):
         link = self.browser.find_element(*BasePageLocators.BASKET_LINK)
         link.click()
+
+    def should_be_authorized_user(self):
+        assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented, probably unauthorised user"
+
+    def find_element(self, how, what, timeout=10):
+        try:
+            return WebDriverWait(self.browser, timeout=timeout).until(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
+            assert False, f"can not find {what}"

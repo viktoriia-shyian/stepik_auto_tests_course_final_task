@@ -1,28 +1,48 @@
 import pytest
+import random
+import string
 
 from .pages.product_page import ProductPage
 from .pages.login_page import LoginPage
 from .pages.basket_page import BasketPage
 
 
-@pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer3",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer4",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer5",
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer6",
-                                  # pytest.param("http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7", marks=pytest.mark.xfail),
-                                  # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
-                                  "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
-def test_guest_can_add_product_to_basket(browser, link):
-    page = ProductPage(browser, link)
-    page.open()
-    page.add_product_to_basket()
-    page.should_be_success_message()
-    page.should_be_message_product_name_match()
-    page.should_be_message_basket_with_cost()
-    page.should_be_message_basket_cost_match()
+@pytest.mark.user_add_to_basket
+class TestUserAddToBasketFromProductPage:
+
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        # should be api creation
+        self.browser = browser
+        self.link = "http://selenium1py.pythonanywhere.com/uk/accounts/login/"
+        min_for_password_char_num = 9
+        email = ''.join(random.choice(string.ascii_letters) for _ in range(min_for_password_char_num)) + "@gmail.com"
+        password = ''.join(random.choice(string.ascii_letters) for _ in range(min_for_password_char_num))
+
+        # usually do not do browser manipulation, here only for setup usage practice
+        login_page = LoginPage(self.browser, self.link)
+        login_page.open()
+        login_page.register_new_user(email, password)
+        login_page.should_be_authorized_user()
+
+        self.link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+
+        # yield
+        # should be data delete
+
+    def test_user_cant_see_success_message(self):
+        page = ProductPage(self.browser, self.link)
+        page.open()
+        page.should_not_be_success_message()
+
+    def test_user_can_add_product_to_basket(self):
+        page = ProductPage(self.browser, self.link)
+        page.open()
+        page.add_product_to_basket()
+        page.should_be_success_message()
+        page.should_be_message_product_name_match()
+        page.should_be_message_basket_with_cost()
+        page.should_be_message_basket_cost_match()
 
 
 @pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
